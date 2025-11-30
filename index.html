@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini Colorful Shop</title>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f0f8ff; color: #333; }
+
+    /* Header */
+    header {
+      background: linear-gradient(90deg, #68f725, #feb47b);
+      padding: 1.2rem;
+      color: white;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    /* Layout */
+    .container { width: 90%; max-width: 1100px; margin: 1rem auto; }
+
+    /* Product Grid */
+    .products { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); 
+      gap: 1rem; 
+      margin-bottom: 2rem;
+    }
+
+    /* Product Card */
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: 0.2s;
+    }
+    .card:hover { transform: scale(1.03); }
+
+    .card img { width: 100%; border-radius: 5px; }
+    .card h3 { margin: 0.5rem 0; }
+    .card p { margin: 0.3rem 0; font-weight: bold; }
+
+    .card button {
+      background: #648842;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    .card button:hover { background: #01db63; }
+
+    /* Cart */
+    aside.cart {
+      background: #b6a99b;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .cart h2 { margin-bottom: 1rem; }
+    .cart-item { 
+      display: flex; 
+      justify-content: space-between; 
+      margin-bottom: 0.6rem; 
+    }
+    .cart-item span { font-weight: bold; }
+
+    /* Billing + Shipping */
+    .form-box {
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-top: 2rem;
+    }
+    .form-box h2 { margin-bottom: 1rem; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 5px;
+      border: 1px solid #aaa;
+    }
+
+    .submit-btn {
+      background: #76c7f0;
+      padding: 0.7rem;
+      margin-top: 1rem;
+      color: white;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      width: 100%;
+    }
+    .submit-btn:hover { background: #4baed9; }
+
+    footer { text-align: center; margin: 2rem 0; color: #777; }
+  </style>
+</head>
+<body>
+
+  <header>
+   my store, your way!
+  </header>
+
+  <div class="container">
+
+    <!-- PRODUCTS SECTION -->
+    <h2>Products</h2>
+    <div id="products" class="products"></div>
+
+    <!-- CART -->
+    <aside class="cart">
+      <h2>Your Cart</h2>
+      <div id="cart-items"><p>No items .</p></div>
+      <p>Total: ₹<span id="cart-total">0.00</span></p>
+    </aside>
+
+    <!-- BILLING + SHIPPING -->
+    <div class="form-box">
+      <h2>Billing and Shipping Details</h2>
+
+      <div class="form-grid">
+        <div>
+          <label>Full Name</label>
+          <input type="text" placeholder=" name">
+        </div>
+        
+        <div>
+          <label>Email</label>
+          <input type="email" placeholder=" your email">
+        </div>
+
+        <div>
+          <label>Phone Number</label>
+          <input type="text" placeholder="98765454710">
+        </div>
+
+        <div>
+          <label>Shipping Address</label>
+          <input type="text" placeholder="House No, Street, City">
+        </div>
+
+        <div>
+          <label>Pin Code</label>
+          <input type="text" placeholder="110001">
+        </div>
+
+        <div>
+          <label>Payment Method</label>
+          <select>
+            <option>Cash on Delivery</option>
+            <option>UPI</option>
+            <option>Credit/Debit Card</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="submit-btn">Place Order</button>
+
+    </div>
+
+  </div>
+
+  <footer>
+    © 2025 My store
+  </footer>
+
+  <script>
+    // PRODUCTS
+    const products = [
+      { id: 1, name: "Red white T-Shirt", price: 699, image: "https://via.placeholder.com/200x200/ff7e5f/fff?text=Red+TShirt" },
+      { id: 2, name: " light Blue Jeans", price: 799, image: "https://via.placeholder.com/200x200/76c7f0/fff?text=Blue+Jeans" },
+      { id: 3, name: "red Cap", price: 2409, image: "https://via.placeholder.com/200x200/8ef08e/fff?text=Green+Cap" },
+      { id: 4, name: "Shoes", price: 1599, image: "https://via.placeholder.com/200x200/f0d76b/fff?text=Sneakers" }
+    ];
+
+    let cart = [];
+
+    const productsDiv = document.getElementById("products");
+    const cartItemsDiv = document.getElementById("cart-items");
+    const cartTotalSpan = document.getElementById("cart-total");
+
+    function renderProducts() {
+      productsDiv.innerHTML = "";
+      products.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${p.image}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <p>₹${p.price}</p>
+          <button onclick="addToCart(${p.id})">Add to Cart</button>
+        `;
+        productsDiv.appendChild(card);
+      });
+    }
+
+    function addToCart(id) {
+      const prod = products.find(p => p.id === id);
+      const existing = cart.find(c => c.id === id);
+
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id: id, qty: 1, price: prod.price, name: prod.name });
+      }
+
+      renderCart();
+    }
+
+    function renderCart() {
+      cartItemsDiv.innerHTML = "";
+      let total = 0;
+
+      if (cart.length === 0) {
+        cartItemsDiv.innerHTML = "<p>No items yet.</p>";
+      } else {
+        cart.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "cart-item";
+          div.innerHTML = `
+            <span>${item.name} x ${item.qty}</span>
+            <span>₹${item.price * item.qty}</span>
+          `;
+          cartItemsDiv.appendChild(div);
+
+          total += item.price * item.qty;
+        });
+      }
+
+      cartTotalSpan.innerText = total.toFixed(2);
+    }
+
+    renderProducts();
+    renderCart();
+  </script>
+
+</body>
+</html>
